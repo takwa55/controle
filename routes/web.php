@@ -29,6 +29,12 @@ route::get('download/{n_pension}/{file_name}', 'EnquetesRapportController@get_fi
 route::get('/wilayasRapport/{id}', 'WilayasRapportController@edit');
 route::get('View_file/{n_pension}/{file_name}', 'WilayasRapportController@open_file');
 route::get('download/{n_pension}/{file_name}', 'WilayasRapportController@get_file');
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('roles','RoleController');
+    Route::resource('users','UserController');
+    });
+    
 Route::get('/{page}', 'AdminController@index');
 
 

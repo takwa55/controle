@@ -28,14 +28,14 @@ Rapport
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                   <h4 class="text-center text-primary">Rapport enquete</h4>
+                   <h4 class="text-center text-primary">Rapport Enquete/338</h4>
                 </div>
             </div>
         </div>
         <div class="table-responsive">
             <table id="example" class="table table-primary table-striped">
                 <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th>#</th>
                         <th>N_Pension</th>
                         <th>file_name</th>
@@ -46,19 +46,22 @@ Rapport
                     <?php $i =0?>
                     @foreach ($attachments as $x)
                     <?php $i++?>
-                        <tr>
+                        <tr class="text-center">
                             <td>{{ $i }}</td>
                             <td>{{ $x->n_pension }}</td>
                             <td>{{ $x->file_name }}</td>
                             <td>
+                                @can('Voir')
                                 <a class="btn btn-outline-success btn-sm"
                                     href="{{ url('View_file') }}/{{ $x->n_pension }}/{{ $x->file_name }}"
                                     role="button"><i class="fas fa-eye"></i>&nbsp; Voir</a>
+                                @endcan
 
+                                @can('telecharger')
                                 <a class="btn btn-outline-info btn-sm"
                                     href="{{ url('download') }}/{{ $x->n_pension }}/{{ $x->file_name }}"
-                                    role="button"><i
-                                        class="fas fa-download"></i>&nbsp;telecharger</a>
+                                    role="button"><i class="fas fa-download"></i>&nbsp;telecharger</a>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach

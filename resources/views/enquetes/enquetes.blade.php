@@ -27,27 +27,43 @@ Mes Enquetes
 <div class="container">
     <div class="row">
 
-    @if(session()->has('Add'))
+        <style>
+            .examp td{
+              border: dotted 1px gray;
+              padding: 3px;
+            }
+            .examp th{
+              padding: 10px;
+              background-color: rgb(97, 97, 226);
+              color: white;
+            }
+            .examp td:hover{
+              background-color: rgb(80, 173, 173);
+              color: white;
+            }
+          </style>
+
+    @if(session()-> has('Add'))
 	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong>{{ session()->get('Add') }}</strong>
+		<strong>{{ session()-> get('Add') }}</strong>
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria_hidden="true">&times;</span>
 		</button>
 	</div>
     @endif
 
-    @if(session()->has('edit'))
+    @if(session()-> has('edit'))
 	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong>{{ session()->get('edit') }}</strong>
+		<strong>{{ session()-> get('edit') }}</strong>
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria_hidden="true">&times;</span>
 		</button>
 	</div>
     @endif
 
-    @if(session()->has('delete'))
+    @if(session()-> has('delete'))
 	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		<strong>{{ session()->get('delete') }}</strong>
+		<strong>{{ session()-> get('delete') }}</strong>
 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria_hidden="true">&times;</span>
 		</button>
@@ -57,31 +73,34 @@ Mes Enquetes
             <div class="card">
                 <div class="card-header">
                     <h4 class="text-center text-primary">Caisse Nationale Des Retraites Constantine</h4>
+                    <br>
+                    @can('Ajouter Assuré')
                     <a class="btn btn-primary float-right "data-target=".modal" data-toggle="modal"
-                     href="#modaldemo8">Ajouter</a>
-                </div>
+                     href="#modaldemo8"><i class="fa fa-plus-circle mr-1"></i> Ajouter Assuré</a>
+                    @endcan
+                </div>  
             </div>
         </div>
-        <div class="table-responsive">
-            <table id="example" class="table table-success table-striped">
+        <div class="box-body">
+            <table style="width: 100%;border:dotted 1px gray;" border="1" id="examp" class="examp">
                 <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>N_Pension</th>
-                      <th>Nom</th>
-                      <th>Demande</th>
-                      <th>Reponse</th>
-                      <th>Periode</th>
-                      <th>Emp</th>
-                      <th>obse</th>
-                      <th>Action</th>
+                    <tr class="text-center">
+                      <th style="width: 70px;">#</th>
+                      <th style="width: 100px;">N_Pension</th>
+                      <th style="width: 350px;">Nom_Prenom</th>
+                      <th style="width: 100px;">Demande</th>
+                      <th style="width: 100px;">Reponse</th>
+                      <th style="width: 170px;">Periode</th>
+                      <th style="width: 210px;">Employeur</th>
+                      <th style="width: 80px;">Rapport</th>
+                      <th style="width: 100px;">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php $i =0?>
                     @foreach ($enquetes as $x)
                     <?php $i++?>
-                        <tr>
+                        <tr class="text-center">
                             <td>{{ $i }}</td>
                             <td>{{ $x->n_pension }}</td>
                             <td>{{ $x->nom }}</td>
@@ -93,16 +112,19 @@ Mes Enquetes
                                 <a href="{{ url('enquetesRapport') }}/{{ $x->id }}">{{ $x->obs }}</a>
                             </td>
                             <td>
-                                <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" data-id="{{ $x->id }}"
+                                @can('Modifier Assuré')
+                                <a class="btn btn-sm btn-info" data-id="{{ $x->id }}"
                                     data-n_pension="{{ $x->n_pension }}" data-nom="{{ $x->nom }}" data-demande="{{ $x->demande }}"
                                     data-reponse="{{ $x->reponse }}" data-periode="{{ $x->periode }}" data-emp="{{ $x->emp }}"
                                     data-obs="{{ $x->obs }}" data-toggle="modal"
-                                    href="#exampleModal2" title="modifier"><i class="las la-pen"></i></a>
-
-
+                                    href="#exampleModal2" title="Modifier Assuré"><i class="las la-pen"></i></a>
+                                @endcan
+                                
+                                @can('Suprimer Assuré')
                                 <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale" data-id="{{ $x->id }}"
-                                    data-n_pension="{{ $x->n_pension }}" data-nom="{{ $x->nom }}" data-toggle="modal" href="#modaldemo7" title="suprimer">
-                                    <i class="las la-trash"></a>
+                                    data-n_pension="{{ $x->n_pension }}" data-nom="{{ $x->nom }}" data-toggle="modal" href="#modaldemo7" title="Suprimer Assuré">
+                                    <i class="las la-trash"></i></a>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
@@ -151,8 +173,8 @@ Mes Enquetes
                                     <input type="text" class="form-control" name="emp">
                                 </div>
                                 <div class="col">
-                                    <label for="">Observation</label>
-                                    <input type="text" class="form-control" name="obs">
+                                    <label for="">Rapport</label>
+                                    <input type="text" class="form-control" name="obs" value="N_Fait">
                                 </div>
                         </div>
                             <div class="col-sm-12 col-md-12">
@@ -215,7 +237,7 @@ Mes Enquetes
                                 <input type="text" class="form-control" name="emp" id="emp">
                             </div>
                             <div class="col">
-                                <label for="">Observation</label>
+                                <label for="">Rapport</label>
                                 <input type="text" class="form-control" name="obs" id="obs">
                             </div>
                         </div>
@@ -245,7 +267,7 @@ Mes Enquetes
                         {{ method_field('delete') }}
                         {{ csrf_field() }}
                         <div class="form-group">
-                            <p class="text-center text-danger"> Vous etes sure de la suprition</p>
+                            <p class="text-center text-danger"> Vous etes sur de Suprimer</p>
                             <input type="hidden" name="id" id="id" value="">
                             <input type="text" class="form-control" name="n_pension" id="n_pension">
                         </div>

@@ -14,6 +14,17 @@ class WilayasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    function __construct()
+    {
+    $this->middleware('permission:Enquete Wilaya', ['only' => ['index']]);
+    /*
+    $this->middleware('permission:Ajouter Permission', ['only' => ['create','store']]);
+    $this->middleware('permission:Modifier Permission', ['only' => ['edit','update']]);
+    $this->middleware('permission:suprimer', ['only' => ['destroy']]);
+    */
+    }
+
     public function index()
     {
         $wilayas = wilayas::all();

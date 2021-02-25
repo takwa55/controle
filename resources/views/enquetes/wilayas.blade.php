@@ -14,63 +14,81 @@ Mes Enquetes wilayas
 
 @section('content')
 <div class="container">
+    <style>
+        .datatable td{
+          border: dotted 1px gray;
+          padding: 3px;
+        }
+        .datatable th{
+          padding: 10px;
+          background-color: rgb(173, 88, 162);
+          color: white;
+        }
+        .datatable td:hover{
+          background-color: rgb(156, 117, 161);
+          color: white;
+        }
+      </style>
     <div class="row">
 
-    @if(session()->has('Add'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>{{ session()->get('Add') }}</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria_hidden="true">&times;</span>
-        </button>
-    </div>
-    @endif
+            @if(session()->has('Add'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ session()->get('Add') }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria_hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
 
-    @if(session()->has('edit'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>{{ session()->get('edit') }}</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria_hidden="true">&times;</span>
-        </button>
-    </div>
-    @endif
+            @if(session()->has('edit'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ session()->get('edit') }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria_hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
 
-    @if(session()->has('delete'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>{{ session()->get('delete') }}</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria_hidden="true">&times;</span>
-        </button>
-    </div>
-    @endif
+            @if(session()->has('delete'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ session()->get('delete') }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria_hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h2 class="text-center text-info table-striped">LES ENQUETES DES WILAYAS</h2>
-                    <a class="btn btn-info float-right "data-target=".modal" data-toggle="modal"
-                         href="#modaldemo8">Ajouter</a>
+                    <br><br>
+                    @can('Ajouter Assuré')
+                    <a class="btn btn-success float-right" data-target=".modal" data-toggle="modal"
+                         href="#modaldemo8"><i class="fa fa-plus-circle mr-1"></i> Ajouter Assuré</a>
+                    @endcan
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table id="example" class="table table-success table-hover table-striped">
+        <div class="box-body">
+            <table style="width: 100%;border:dotted 1px gray;" border="1" id="datatable" class="datatable">
                 <thead>
-                    <tr class="text-bold">
-                      <th>#</th>
-                      <th>N_Pension</th>
-                      <th>Nom</th>
-                      <th>Demande</th>
-                      <th>Reponse</th>
-                      <th>Periode</th>
-                      <th>Emp</th>
-                      <th>rapport</th>
-                      <th>Action</th>
+                    <tr class="text-center">
+                      <th style="width: 80px;">#</th>
+                      <th style="width: 110px;">N_Pension</th>
+                      <th style="width: 240px;">Nom</th>
+                      <th style="width: 110px;">Demande</th>
+                      <th style="width: 110px;">Reponse</th>
+                      <th style="width: 170px;">Periode</th>
+                      <th style="width: 210px;">Employeur</th>
+                      <th style="width: 100px;">Rapport</th>
+                      <th style="width: 120px;">Action</th>
                     </tr>
-                  </thead>
-                  <tbody>
+                </thead>
+                <tbody>
                       <?php $i=0 ?>
                     @foreach ($wilayas as $x)
                       <?php $i++ ?>
-                    <tr>
+                    <tr class="text-center">
                         <td>{{ $i }}</td>
                         <td>{{ $x->n_pension }}</td>
                         <td>{{ $x->nom }}</td>
@@ -82,21 +100,23 @@ Mes Enquetes wilayas
                             <a href="{{ url('wilayasRapport') }}/{{ $x->id }}">{{ $x->rapport }}</a>
                         </td>
                         <td>
-                            <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" data-id="{{ $x->id }}"
+                            @can('Modif_Ass')
+                            <a class="btn btn-sm btn-info" data-id="{{ $x->id }}"
                                 data-n_pension="{{ $x->n_pension }}" data-nom="{{ $x->nom }}" data-demande="{{ $x->demande }}"
                                 data-reponse="{{ $x->reponse }}" data-periode="{{ $x->periode }}" data-emp="{{ $x->emp }}"
-                                data-obs="{{ $x->rapport }}" data-toggle="modal"
-                                href="#exampleModal2" title="modifier"><i class="las la-pen"></i></a>
+                                data-rapport="{{ $x->rapport }}" data-toggle="modal"
+                                href="#exampleModal2" title="Modif_Ass"><i class="las la-pen"></i></a>
+                            @endcan  
 
-
+                            @can('Supri_Ass')   
                             <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale" data-id="{{ $x->id }}"
-                                data-n_pension="{{ $x->n_pension }}" data-nom="{{ $x->nom }}" data-toggle="modal" href="#modaldemo7" title="suprimer">
-                                <i class="las la-trash"></a>
+                                data-n_pension="{{ $x->n_pension }}" data-nom="{{ $x->nom }}" data-toggle="modal" href="#modaldemo7" title="Supri_Ass">
+                                <i class="las la-trash"></i></a>
+                            @endcan
                         </td>
                     </tr>
-
                     @endforeach
-                  </tbody>
+                </tbody>
             </table>
         </div>
 
@@ -233,7 +253,7 @@ Mes Enquetes wilayas
                             {{ method_field('delete') }}
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <p class="text-center text-danger"> Vous etes sure de la suprition</p>
+                                <p class="text-center text-danger">  ? Vous etes sur de Suprimer</p>
                                 <input type="hidden" name="id" id="id" value="">
                                 <input type="text" class="form-control" name="n_pension" id="n_pension">
                             </div>
